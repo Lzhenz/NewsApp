@@ -1,0 +1,84 @@
+package com.zhenz.newsappcopy.adapter;
+
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.zhenz.newsappcopy.R;
+import com.zhenz.newsappcopy.model.Article;
+
+import java.util.ArrayList;
+
+public class MovieArticleAdapter extends RecyclerView.Adapter<MovieArticleAdapter.ViewHolder>{
+    private Context context = null;
+    ArrayList<Article> articleArrayList;
+    public MovieArticleAdapter(Context context, ArrayList<Article> articleArraylist) {
+        this.context = context;
+        this.articleArrayList = articleArraylist;
+    }
+
+    @NonNull
+    @Override
+    public MovieArticleAdapter.ViewHolder  onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return null;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull MovieArticleAdapter.ViewHolder viewHolder, int i) {
+        Article article = articleArrayList.get(i);
+        viewHolder.tvTitle.setText(article.getTitle());
+        viewHolder.tvAuthorAndPublishedAt.setText("-"+article.getAuthor() +" | "+"Published At: "+article.getPublishedAt());
+        viewHolder.tvDescription.setText(article.getDescription());
+        Glide.with(context)
+                .load(article.getUrlToImage())
+                .into(viewHolder.imgViewCover);
+    }
+
+    @Override
+    public int getItemCount() {
+        return articleArrayList.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
+        private final ImageView imgViewCover;
+        private final TextView tvTitle;
+        private final TextView tvAuthorAndPublishedAt;
+        private final TextView tvDescription;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            // 实际处理每个字段的赋值逻辑
+            imgViewCover=(ImageView) itemView.findViewById(R.id.imageViewCover);
+            tvTitle=(TextView) itemView.findViewById(R.id.tvTitle);
+            tvAuthorAndPublishedAt=(TextView) itemView.findViewById(R.id.tvAuthorAndPublishedAt);
+            tvDescription=(TextView) itemView.findViewById(R.id.tvDescription);
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
