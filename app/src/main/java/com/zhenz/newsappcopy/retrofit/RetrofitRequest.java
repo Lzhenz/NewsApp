@@ -9,13 +9,9 @@ public class RetrofitRequest {
 
     private static Retrofit retrofit;
 
-    // todo:delete
-    // public final static String BASE_URL = "https://newsapi.org/";;
-    // nothing to return
-    public RetrofitRequest(){}
     public static Retrofit getRetrofitInstance(){
         if (retrofit == null){
-            retrofit = new Retrofit.Builder()
+            retrofit = new retrofit2.Retrofit.Builder()
                     .baseUrl(AppConstant.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();

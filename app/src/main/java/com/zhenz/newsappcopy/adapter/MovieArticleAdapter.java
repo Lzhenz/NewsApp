@@ -1,6 +1,7 @@
 package com.zhenz.newsappcopy.adapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -25,8 +26,9 @@ public class MovieArticleAdapter extends RecyclerView.Adapter<MovieArticleAdapte
 
     @NonNull
     @Override
-    public MovieArticleAdapter.ViewHolder  onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+    public MovieArticleAdapter.ViewHolder  onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_each_row_movie_article, viewGroup, false);
+        return new ViewHolder(view);
     }
 
     @Override

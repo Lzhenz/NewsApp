@@ -1,6 +1,8 @@
 package com.zhenz.newsappcopy.view;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -18,11 +20,14 @@ import com.zhenz.newsappcopy.R;
 import com.zhenz.newsappcopy.adapter.MovieArticleAdapter;
 import com.zhenz.newsappcopy.model.Article;
 import com.zhenz.newsappcopy.response.ArticleResponse;
+import com.zhenz.newsappcopy.view_model.ArticleViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 // 目前对于xml的视图代码，AppCompatActivity依旧是最优解
 public class MainActivity extends AppCompatActivity {
+    private final static String TAG = MainActivity.class.getSimpleName();
     // 定义xml中的类型，一共是三个
     private ProgressBar progress_circular_movie_article;
     private RecyclerView my_recycler_view;
@@ -35,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Article> articleArraylist =  new ArrayList<>();
 
     // todo:after define
-    // ArticleViewModel articleViewModel;
+    ArticleViewModel articleViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
 
         // get init
         initialization();
+
+        // get data
+        getMovieArticles();
     }
 
 
@@ -51,8 +59,9 @@ public class MainActivity extends AppCompatActivity {
      * 实例化各种组件
      */
     private void initialization(){
+        System.out.println("initialization start");
         progress_circular_movie_article = (ProgressBar) findViewById(R.id.progress_circular_movie_article);
-        my_recycler_view = findViewById(R.id.my_recyclerView);
+        my_recycler_view = (RecyclerView) findViewById(R.id.my_recyclerView);
 
 
         layoutManager = new LinearLayoutManager(MainActivity.this); // Context -> Activity.this
@@ -64,12 +73,24 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MovieArticleAdapter(MainActivity.this , articleArraylist);
         my_recycler_view.setAdapter(adapter);
 
-        // ViewModelProviders.of(this).get(ArticleViewModel.class);
+        articleViewModel =  ViewModelProviders.of(this).get(ArticleViewModel.class);
 
+        System.out.println("initialization end");
 
     }
 
-
+    private void getMovieArticles(){
+        System.out.println("getMovieArticles start");
+        articleViewModel.getArticleResponseLiveData().observe(this , articleResponse -> {
+            if(articleResponse != null){
+                progress_circular_movie_article.setVisibility(View.GONE);
+                List<Article> articles = articleResponse.getArticles();
+                articleArraylist.addAll(articles);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        Log.d(TAG , "getMovieArticles End");
+    }
 
 
 
