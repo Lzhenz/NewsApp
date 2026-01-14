@@ -29,6 +29,10 @@ public class ArticleRepository {
     public LiveData<ArticleResponse> getMovieArticles(String query , String key){
         final MutableLiveData<ArticleResponse> data = new MutableLiveData<>();
         // 调用apiRequest查询数据并且处理返回
+        /**
+         * 这里为什么是异步请求
+         *
+         */
         apiRequest.getMovieArticles(query , key).
                 enqueue(new Callback<ArticleResponse>() {
                     @Override

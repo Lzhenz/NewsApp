@@ -14,16 +14,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NewsAppCopy"
         tools:targetApi="31">
-
-        <activity android:name=".view.MainActivity" android:exported="true">
-
+        <activity
+            android:name=".view.LogoutPage"
+            android:exported="false" />
+        <activity
+            android:name=".view.loginPage"
+            android:exported="true" />
+        <activity
+            android:name=".view.MainActivity"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
     </application>
 
 </manifest>

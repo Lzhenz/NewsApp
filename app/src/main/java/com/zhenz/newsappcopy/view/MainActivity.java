@@ -1,16 +1,15 @@
 package com.zhenz.newsappcopy.view;
 
+import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.zhenz.newsappcopy.R;
 import com.zhenz.newsappcopy.adapter.MovieArticleAdapter;
 import com.zhenz.newsappcopy.model.Article;
-import com.zhenz.newsappcopy.response.ArticleResponse;
 import com.zhenz.newsappcopy.view_model.ArticleViewModel;
 
 import java.util.ArrayList;
@@ -31,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     // 定义xml中的类型，一共是三个
     private ProgressBar progress_circular_movie_article;
     private RecyclerView my_recycler_view;
+    private Button btn_2Login;
     private LinearLayoutManager layoutManager;
 
     // 定义adapter
@@ -40,18 +39,35 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Article> articleArraylist =  new ArrayList<>();
 
     // todo:after define
-    ArticleViewModel articleViewModel;
+    private ArticleViewModel articleViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activate_main);
+        btn_2Login = findViewById(R.id.btn_2login);
 
         // get init
         initialization();
 
         // get data
         getMovieArticles();
+
+        // click event
+        btn_2Login.setOnClickListener(v->{
+            articleViewModel.onDetailButtonClick();
+        });
+
+        articleViewModel.getNavigateToDetailEvent().observe(this , event -> {
+            // Log.d(TAG , "************" + event.getContentIfNotHandled() + "************");
+            Log.d("ACT", "observe event, vm=" + articleViewModel);
+            if (event == null) return;;
+            if (event.getContentIfNotHandled() != null){
+                startActivity(new Intent(this, loginPage.class));
+            }else{
+                Log.d(TAG, "无法进行跳转～～～～～～～～～～～～～" + event.getContentIfNotHandled());
+            }
+        });
     }
 
 
@@ -73,14 +89,13 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MovieArticleAdapter(MainActivity.this , articleArraylist);
         my_recycler_view.setAdapter(adapter);
 
-        articleViewModel =  ViewModelProviders.of(this).get(ArticleViewModel.class);
-
+        // articleViewModel =  ViewModelProviders.of(this).get(ArticleViewModel.class);
+        articleViewModel = new ViewModelProvider(this).get(ArticleViewModel.class);
         System.out.println("initialization end");
 
     }
 
     private void getMovieArticles(){
-        System.out.println("getMovieArticles start");
         articleViewModel.getArticleResponseLiveData().observe(this , articleResponse -> {
             if(articleResponse != null){
                 progress_circular_movie_article.setVisibility(View.GONE);
@@ -91,18 +106,6 @@ public class MainActivity extends AppCompatActivity {
         });
         Log.d(TAG , "getMovieArticles End");
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
